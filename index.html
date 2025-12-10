@@ -1,40 +1,490 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Class Notes</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>CBSE Board Papers & Solutions</title>
 
-    <!-- Google Icons -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<!-- Material Icons -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f1f1f1;
-        }
+<style>
+  :root{
+    --bg: #f6f7fb;
+    --card: #ffffff;
+    --muted: #6b7280;
+    --accent: #1a73e8;
+    --surface-shadow: 0 6px 18px rgba(22, 28, 37, 0.08);
+    --round: 14px;
+    --gap: 16px;
+  }
 
-        .container {
-            width: 92%;
-            margin: auto;
-            margin-top: 30px;
-        }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: "Google Sans", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: linear-gradient(180deg,#f6f7fb 0%, #f2f3f8 100%);
+    color:#111827;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    padding:24px 16px;
+  }
 
-        .card {
-            background: #fff;
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            cursor: pointer;
-        }
+  header{
+    max-width:1000px;
+    margin:0 auto 18px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
 
-        .left {
-            display: flex;
+  .logo {
+    width:48px;
+    height:48px;
+    border-radius:12px;
+    background:linear-gradient(135deg,#4285F4 0%, #0F9D58 100%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    font-weight:700;
+    box-shadow:var(--surface-shadow);
+    flex:0 0 48px;
+  }
+
+  h1{
+    font-size:20px;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+
+  .subtitle{
+    font-size:13px;
+    color:var(--muted);
+    margin-top:4px;
+  }
+
+  .page {
+    max-width:1000px;
+    margin: 0 auto;
+  }
+
+  .streams {
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+  }
+
+  /* Stream card */
+  .stream {
+    background:var(--card);
+    border-radius:var(--round);
+    padding:14px;
+    box-shadow:var(--surface-shadow);
+    transition:transform .18s ease, box-shadow .18s ease;
+    overflow:hidden;
+  }
+
+  .stream:hover{
+    transform:translateY(-2px);
+  }
+
+  .stream-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    cursor:pointer;
+  }
+
+  .stream-left{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+
+  .stream-icon{
+    width:48px;
+    height:48px;
+    border-radius:10px;
+    background:linear-gradient(135deg,#E8F0FE 0%, #E3FCEF 100%);
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+    color:var(--accent);
+    flex:0 0 48px;
+  }
+
+  .stream-title{
+    font-weight:600;
+    font-size:17px;
+  }
+
+  .stream-meta{
+    font-size:13px;
+    color:var(--muted);
+  }
+
+  .chev{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:36px;
+    height:36px;
+    border-radius:10px;
+    transition:transform .22s ease;
+    color:var(--muted);
+  }
+
+  /* Stream content (subjects) */
+  .stream-body{
+    margin-top:12px;
+    display:grid;
+    gap:10px;
+  }
+
+  /* Subject card */
+  .subject {
+    background:#fbfdff;
+    border-radius:12px;
+    padding:12px;
+    box-shadow: 0 3px 10px rgba(16,24,40,0.04);
+  }
+
+  .subject-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    cursor:pointer;
+  }
+
+  .subject-left{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+
+  .subject-icon{
+    width:40px;
+    height:40px;
+    border-radius:8px;
+    background:linear-gradient(135deg,#fff 0%, #f7fafc 100%);
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    color:#374151;
+    font-size:20px;
+    flex:0 0 40px;
+  }
+
+  .subject-title{
+    font-weight:600;
+    font-size:15px;
+  }
+
+  /* The expanded area inside subject (categories + years) */
+  .subject-body{
+    margin-top:12px;
+    display:none; /* toggled via .open */
+    gap:12px;
+    padding-top:6px;
+  }
+
+  .subject.open .subject-body{
+    display:flex;
+    flex-direction:column;
+  }
+
+  .category-row{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+
+  .category {
+    background:var(--card);
+    border-radius:10px;
+    padding:10px 12px;
+    min-width:160px;
+    box-shadow:0 4px 14px rgba(17,24,39,0.04);
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+
+  .category-title{
+    font-weight:600;
+    font-size:13px;
+    color:#111827;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+
+  .years {
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-top:6px;
+  }
+
+  .year-link {
+    background: #f3f4f6;
+    color:#111827;
+    padding:8px 10px;
+    border-radius:8px;
+    text-decoration:none;
+    font-weight:600;
+    font-size:13px;
+    box-shadow:none;
+    transition:all .12s ease;
+  }
+
+  .year-link:hover{
+    transform:translateY(-2px);
+    box-shadow: 0 6px 18px rgba(17,24,39,0.06);
+  }
+
+  .category .empty-note{
+    font-size:13px;
+    color:var(--muted);
+  }
+
+  /* small screens tweaks */
+  @media (max-width:600px){
+    body{padding:16px 12px}
+    .category{min-width:140px}
+    .stream-icon{width:44px;height:44px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo" aria-hidden="true">Q</div>
+  <div>
+    <h1>Board Papers & Solutions</h1>
+    <div class="subtitle">Class 12 CBSE — Previous Year Question Papers & Solutions</div>
+  </div>
+</header>
+
+<main class="page">
+  <div class="streams" id="streamsContainer" aria-live="polite"></div>
+</main>
+
+<script>
+/* ---------- Configuration (update PDFs by uploading to papers/<stream-id>/...) ---------- */
+
+const streams = [
+  { name: "PCM Computer", id: "pcm-computer", icon: "computer" ,
+    subjects: ["English","Mathematics","Physics","Chemistry","Computer Science"] },
+  { name: "PCM Biology", id: "pcm-biology", icon: "science" ,
+    subjects: ["English","Mathematics","Physics","Chemistry","Biology"] },
+  { name: "PCB Language", id: "pcb-language", icon: "language" ,
+    subjects: ["English","Physics","Chemistry","Biology","Language"] },
+  { name: "Commerce", id: "commerce", icon: "business_center" ,
+    subjects: ["English","Mathematics","Accountancy","Business Studies","Economics"] },
+  { name: "Humanities", id: "humanities", icon: "menu_book" ,
+    subjects: ["English","History","Political Science","Geography","Economics","Psychology"] }
+];
+
+const years = [2025, 2024];
+const categories = [
+  { key: "question", title: "Question Papers" },
+  { key: "solution", title: "Solutions" }
+];
+
+/* ---------- Helpers ---------- */
+
+function safeName(text){
+  return text.toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')      // spaces -> hyphens
+    .replace(/[^a-z0-9\-]/g, '') // remove invalid chars
+    ;
+}
+
+function pdfPath(streamId, subject, year, categoryKey){
+  // default path pattern - put your PDFs in this structure in the repo
+  // papers/<stream-id>/<subject>-<year>-<category>.pdf
+  return `papers/${streamId}/${safeName(subject)}-${year}-${categoryKey}.pdf`;
+}
+
+/* ---------- Render UI ---------- */
+
+const container = document.getElementById('streamsContainer');
+
+streams.forEach(stream=>{
+  const streamEl = document.createElement('section');
+  streamEl.className = 'stream';
+  streamEl.setAttribute('aria-label', stream.name);
+
+  streamEl.innerHTML = `
+    <div class="stream-header" role="button" tabindex="0" aria-expanded="false">
+      <div class="stream-left">
+        <span class="stream-icon material-icons-outlined" aria-hidden="true">${stream.icon}</span>
+        <div>
+          <div class="stream-title">${stream.name}</div>
+          <div class="stream-meta">Subjects & PDFs</div>
+        </div>
+      </div>
+      <div class="chev" aria-hidden="true">
+        <span class="material-icons-outlined">expand_more</span>
+      </div>
+    </div>
+
+    <div class="stream-body" hidden>
+      <!-- Subjects will be injected here -->
+    </div>
+  `;
+
+  container.appendChild(streamEl);
+
+  const header = streamEl.querySelector('.stream-header');
+  const body = streamEl.querySelector('.stream-body');
+  const chev = streamEl.querySelector('.chev .material-icons-outlined');
+
+  // Toggle stream open/close
+  function toggleStream(open){
+    const isOpen = (open === undefined) ? body.hidden === false : open;
+    if(isOpen){
+      body.hidden = true;
+      header.setAttribute('aria-expanded','false');
+      chev.style.transform = '';
+    } else {
+      body.hidden = false;
+      header.setAttribute('aria-expanded','true');
+      chev.style.transform = 'rotate(180deg)';
+    }
+  }
+
+  header.addEventListener('click', ()=> toggleStream());
+  header.addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleStream(); }
+  });
+
+  // Build subjects
+  stream.subjects.forEach(subj=>{
+    const subjectEl = document.createElement('div');
+    subjectEl.className = 'subject';
+    subjectEl.innerHTML = `
+      <div class="subject-header" role="button" tabindex="0" aria-expanded="false">
+        <div class="subject-left">
+          <span class="subject-icon material-icons-outlined" aria-hidden="true">description</span>
+          <div class="subject-title">${subj}</div>
+        </div>
+        <div class="chev-sub" aria-hidden="true">
+          <span class="material-icons-outlined">expand_more</span>
+        </div>
+      </div>
+
+      <div class="subject-body" hidden>
+        <div class="category-row"></div>
+      </div>
+    `;
+
+    body.appendChild(subjectEl);
+
+    const subjHeader = subjectEl.querySelector('.subject-header');
+    const subjBody = subjectEl.querySelector('.subject-body');
+    const chevSub = subjectEl.querySelector('.chev-sub .material-icons-outlined');
+
+    function toggleSubject(open){
+      const isOpen = (open === undefined) ? subjBody.hidden === false : open;
+      if(isOpen){
+        subjElClose();
+      } else {
+        subjElOpen();
+      }
+    }
+
+    function subjElOpen(){
+      subjectEl.classList.add('open');
+      subjBody.hidden = false;
+      subjHeader.setAttribute('aria-expanded','true');
+      chevSub.style.transform = 'rotate(180deg)';
+    }
+
+    function subjElClose(){
+      subjectEl.classList.remove('open');
+      subjBody.hidden = true;
+      subjHeader.setAttribute('aria-expanded','false');
+      chevSub.style.transform = '';
+    }
+
+    subjHeader.addEventListener('click', ()=>{
+      // toggle this subject only
+      if(subjBody.hidden) subjElOpen(); else subjElClose();
+    });
+
+    subjHeader.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); subjHeader.click(); }
+    });
+
+    // populate categories (both visible inside subject per Option B)
+    const catRow = subjectEl.querySelector('.category-row');
+
+    categories.forEach(cat=>{
+      const catDiv = document.createElement('div');
+      catDiv.className = 'category';
+      catDiv.innerHTML = `
+        <div class="category-title">
+          <span class="material-icons-outlined" style="font-size:18px; color:var(--accent)">${cat.key === 'question' ? 'description' : 'check_circle'}</span>
+          <span>${cat.title}</span>
+        </div>
+        <div class="years"></div>
+      `;
+      catRow.appendChild(catDiv);
+
+      const yearsContainer = catDiv.querySelector('.years');
+
+      // create year links
+      years.forEach(y=>{
+        const a = document.createElement('a');
+        a.className = 'year-link';
+        a.textContent = String(y);
+
+        // compute path
+        const file = pdfPath(stream.id, subj, y, cat.key);
+
+        // set href to file; open in new tab
+        a.href = file;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.setAttribute('title', `${cat.title} — ${subj} ${y}`);
+
+        yearsContainer.appendChild(a);
+      });
+
+      // if no years, show note
+      if(years.length === 0){
+        const note = document.createElement('div');
+        note.className = 'empty-note';
+        note.textContent = 'No PDFs uploaded yet';
+        catDiv.appendChild(note);
+      }
+    });
+
+  }); // end subjects loop
+
+}); // end streams loop
+
+/* ---------- Optional: keyboard shortcut to close all streams with Escape ---------- */
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape'){
+    document.querySelectorAll('.stream .stream-body').forEach(b=>{ b.hidden = true; });
+    document.querySelectorAll('.stream .stream-header').forEach(h=>{ h.setAttribute('aria-expanded','false'); });
+    document.querySelectorAll('.subject').forEach(s=>{ s.classList.remove('open'); s.querySelector('.subject-body').hidden = true; s.querySelector('.subject-header').setAttribute('aria-expanded','false'); });
+    document.querySelectorAll('.chev .material-icons-outlined, .chev-sub .material-icons-outlined').forEach(i=>{ i.style.transform = ''; });
+  }
+});
+</script>
+</body>
+</html>            display: flex;
             align-items: center;
             gap: 15px;
         }
