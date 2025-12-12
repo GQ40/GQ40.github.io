@@ -1,20 +1,45 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Question Papers</title>
-  <link rel="stylesheet" href="css/style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Previous Year Question Papers</title>
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <h1>Previous Year Question Papers</h1>
+  <header class="app-bar">
+    <div class="container">
+      <h1 class="title">Previous Year Question Papers</h1>
+      <p class="subtitle">Browse and download papers — PCM · PCM+CS · PCM+Bio</p>
+    </div>
+  </header>
 
-  <div class="filter-row">
-    <select id="subjectFilter"></select>
-    <select id="yearFilter"></select>
-  </div>
+  <main class="container content">
+    <div class="controls">
+      <label class="control">
+        <span class="label-text">Subject</span>
+        <select id="subjectFilter" class="select"></select>
+      </label>
 
-  <div id="papersContainer"></div>
+      <label class="control">
+        <span class="label-text">Year</span>
+        <select id="yearFilter" class="select"></select>
+      </label>
+
+      <label class="control search">
+        <span class="label-text">Search</span>
+        <input id="searchBox" class="input" placeholder="Search titles (e.g. physics 2023)" />
+      </label>
+    </div>
+
+    <section id="papersContainer" class="papers-list" aria-live="polite">
+      <!-- populated by js -->
+    </section>
+  </main>
+
+  <footer class="container footer">
+    <small>Files hosted on GitHub Pages • PDFs open in-browser with a download button.</small>
+  </footer>
 
   <script src="js/main.js"></script>
 </body>
