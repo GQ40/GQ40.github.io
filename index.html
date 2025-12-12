@@ -2,11 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Previous Year Question Papers</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
+
 <body>
+  <!-- Header -->
   <header class="app-bar">
     <div class="container">
       <h1 class="title">Previous Year Question Papers</h1>
@@ -14,8 +16,12 @@
     </div>
   </header>
 
+  <!-- Main content -->
   <main class="container content">
+
+    <!-- Filters -->
     <div class="controls">
+
       <label class="control">
         <span class="label-text">Subject</span>
         <select id="subjectFilter" class="select"></select>
@@ -30,11 +36,25 @@
         <span class="label-text">Search</span>
         <input id="searchBox" class="input" placeholder="Search titles (e.g. physics 2023)" />
       </label>
+
     </div>
 
-    <section id="papersContainer" class="papers-list" aria-live="polite">
-      <!-- populated by js -->
+    <!-- Papers list -->
+    <section id="paperList" class="papers-list" aria-live="polite">
+      <!-- Injected by main.js -->
     </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="container footer">
+    <small>Files hosted on GitHub Pages • PDFs open in-browser with a download button.</small>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="js/main.js"></script>
+</body>
+</html>    </section>
   </main>
 
   <footer class="container footer">
