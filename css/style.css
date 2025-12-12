@@ -71,17 +71,28 @@ body{
 /* papers list (clean links like Google) */
 .papers-list { display:flex; flex-direction:column; gap:6px; }
 .paper-item {
-  padding:14px 8px;
-  border-bottom:1px solid var(--divider);
+    padding: 16px 0;
+    border-bottom: 1px solid #eee;
   display:flex;
   align-items:center;
   justify-content:space-between;
 }
-.paper-meta { display:flex; flex-direction:column; gap:4px; max-width:78%; }
+.paper-meta {
+    color: #555;
+    font-size: 15px;
+    margin-bottom: 12px;
+}
 .paper-title {
-  color: var(--primary);
-  text-decoration:none;
-  font-size:16px;
+    font-size: 17px;
+    font-weight: 500;
+    color: #1a73e8;
+    margin-bottom: 6px;
+}
+.paper-actions {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    flex-wrap: wrap;
 }
 .paper-sub { font-size:13px; color:var(--muted); }
 
@@ -96,8 +107,22 @@ body{
   color:white;
   background:var(--primary);
 }
-.button.open-new { background: #3c4043; }
-.button.download { background: var(--primary); }
+.button.open {
+    background: #333;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: none;
+    font-size: 15px;
+}
+.button.download {
+    background: #1a73e8;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: none;
+    font-size: 15px;
+}
 
 /* viewer */
 .viewer-container { padding-top:8px; padding-bottom:40px; }
@@ -111,12 +136,21 @@ body{
 .error { padding:12px; background:#fff3cd; border-radius:6px; color:#856404; border:1px solid #ffeeba; }
 
 /* responsive */
-@media (max-width:640px) {
+@media (max-width:420px) {
   .container { padding:14px; }
   .title { font-size:22px; }
   .controls { gap:8px; }
   .pdf-viewer { height: calc(100vh - 140px); }
   .paper-title { font-size:15px; }
+  .paper-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+  .button.open, .button.download {
+        flex-grow: 1;
+        text-align: center;
+    }
 }
 
 /* small link style for "back" */
