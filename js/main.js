@@ -118,3 +118,18 @@ window.addEventListener('load', async () => {
   document.getElementById('yearFilter').addEventListener('change', () => applyFilters(papers));
   document.getElementById('searchBox').addEventListener('input', () => applyFilters(papers));
 });
+function downloadFile(url) {
+  fetch(url)
+    .then(res => res.blob())
+    .then(blob => {
+      const blobUrl = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = url.split("/").pop();
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(blobUrl);
+    })
+    .catch(err => console.error("Download failed:", err));
+}
