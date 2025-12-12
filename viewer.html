@@ -1,14 +1,27 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>View PDF</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <a id="downloadBtn" class="download-btn" download>Download PDF</a>
-  <iframe id="pdfFrame" class="pdf-viewer"></iframe>
+  <header class="app-bar small">
+    <div class="container">
+      <a href="index.html" class="back-link">← Back</a>
+      <div id="viewerTitle" class="viewer-title">Viewing PDF</div>
+      <a id="downloadBtn" class="button download" download>Download</a>
+      <a id="openNewTabBtn" class="button open-new" target="_blank" rel="noopener">Open in new tab</a>
+    </div>
+  </header>
+
+  <main class="container viewer-container">
+    <!-- iframe will contain the PDF blob or direct URL -->
+    <iframe id="pdfFrame" class="pdf-viewer" title="PDF viewer"></iframe>
+    <div id="errorBox" class="error" hidden></div>
+  </main>
+
   <script src="js/viewer.js"></script>
 </body>
 </html>
