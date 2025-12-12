@@ -1,135 +1,139 @@
-// -----------------------------
-// Load Papers JSON
-// -----------------------------
+/* -------------------------------
+   Main JS for Question Paper Site
+   Google-style UI + iPhone-safe download
+-------------------------------- */
+
+// Load JSON data
 async function loadPapers() {
-  try {
-    const res = await fetch("papers.json");
-    return await res.json();
-  } catch (e) {
-    console.error("Failed to load papers.json", e);
-    return [];
-  }
+  const response = await fetch("papers.json");
+  return await response.json();
 }
 
-// -----------------------------
-// Populate Filters
-// -----------------------------
-function populateFilters(papers) {
-  const subjectFilter = document.getElementById("subjectFilter");
-  const yearFilter = document.getElementById("yearFilter");
+async function loadSubjects() {
+  const response = await fetch("subjects.json");
+  return await response.json();
+}
 
-  // Subject list
-  const subjects = [...new Set(papers.map(p => p.subject))].sort();
+async function loadYears(papers) {
+  return [...new Set(papers.map(p => p.year))].sort((a, b) => b - a);
+}
+
+/* -------------------------------
+   Initial Page Load
+-------------------------------- */
+window.addEventListener("load", async () => {
+  const papers = await loadPapers();
+  const subjects = await loadSubjects();
+  const years = await loadYears(papers);
+
+  populateSubjectFilter(subjects);
+  populateYearFilter(years);
+  renderPapers(papers);
+
+  // Event listeners
+  document.getElementById("subjectFilter").addEventListener("change", () => applyFilters(papers));
+  document.getElementById("yearFilter").addEventListener("change", () => applyFilters(papers));
+  document.getElementById("searchBox").addEventListener("input", () => applyFilters(papers));
+});
+
+/* -------------------------------
+   Filters
+-------------------------------- */
+function populateSubjectFilter(subjects) {
+  const select = document.getElementById("subjectFilter");
+  select.innerHTML = `<option value="all">All Subjects</option>`;
+
   subjects.forEach(sub => {
-    const opt = document.createElement("option");
-    opt.value = sub;
-    opt.textContent = capitalize(sub);
-    subjectFilter.appendChild(opt);
-  });
-
-  // Year list
-  const years = [...new Set(papers.map(p => p.year))].sort((a, b) => b - a);
-  years.forEach(y => {
-    const opt = document.createElement("option");
-    opt.value = y;
-    opt.textContent = y;
-    yearFilter.appendChild(opt);
+    select.innerHTML += `<option value="${sub.id}">${sub.name}</option>`;
   });
 }
 
-// -----------------------------
-// Apply Filters
-// -----------------------------
-function applyFilters(papers) {
-  const subject = document.getElementById("subjectFilter").value;
-  const year = document.getElementById("yearFilter").value;
-  const query = document.getElementById("searchBox").value.toLowerCase();
+function populateYearFilter(years) {
+  const select = document.getElementById("yearFilter");
+  select.innerHTML = `<option value="all">All Years</option>`;
 
-  const filtered = papers.filter(p => {
-    return (
-      (subject === "all" || p.subject === subject) &&
-      (year === "all" || p.year.toString() === year) &&
-      (p.title.toLowerCase().includes(query) ||
-       p.subject.toLowerCase().includes(query))
-    );
+  years.forEach(year => {
+    select.innerHTML += `<option value="${year}">${year}</option>`;
+  });
+}
+
+function applyFilters(allPapers) {
+  const subjectValue = document.getElementById("subjectFilter").value;
+  const yearValue = document.getElementById("yearFilter").value;
+  const searchQuery = document.getElementById("searchBox").value.toLowerCase();
+
+  const filtered = allPapers.filter(paper => {
+    const matchesSubject = subjectValue === "all" || paper.subject === subjectValue;
+    const matchesYear = yearValue === "all" || paper.year == yearValue;
+    const matchesSearch = paper.title.toLowerCase().includes(searchQuery);
+    return matchesSubject && matchesYear && matchesSearch;
   });
 
   renderPapers(filtered);
 }
 
-// -----------------------------
-// Render Paper List
-// -----------------------------
-function renderPapers(list) {
+/* -------------------------------
+   Render Papers (Google UI Style)
+-------------------------------- */
+function renderPapers(papers) {
   const container = document.getElementById("paperList");
   container.innerHTML = "";
 
-  if (list.length === 0) {
-    container.innerHTML = `<p class="no-results">No papers found.</p>`;
+  if (papers.length === 0) {
+    container.innerHTML = `<p class="no-results">No matching papers found.</p>`;
     return;
   }
 
-  list.forEach(p => {
-    const item = document.createElement("div");
-    item.className = "paper-item";
+  papers.forEach(p => {
+    const card = document.createElement("div");
+    card.className = "paper-card";
 
-    item.innerHTML = `
-      <div class="paper-details">
+    card.innerHTML = `
+      <div class="paper-info">
         <a class="paper-title" href="viewer.html?file=${encodeURIComponent(p.file)}">
           ${p.title}
         </a>
-        <div class="paper-meta">
-          ${capitalize(p.subject)} • ${p.year}
-        </div>
+        <div class="paper-meta">${capitalize(p.subject)} • ${p.year}</div>
       </div>
 
       <div class="paper-actions">
-        <a class="button open" href="viewer.html?file=${encodeURIComponent(p.file)}">Open</a>
-        <button class="button download" onclick="downloadFile('${p.file}')">Download</button>
+        <a class="btn open-btn" 
+           href="viewer.html?file=${encodeURIComponent(p.file)}">
+          Open
+        </a>
+
+        <button class="btn download-btn" onclick="downloadFile('${p.file}')">
+          Download
+        </button>
       </div>
     `;
 
-    container.appendChild(item);
+    container.appendChild(card);
   });
 }
 
-// -----------------------------
-// iPhone-safe Download Function
-// -----------------------------
+/* -------------------------------
+   iPhone-Safe PDF Download Fix
+-------------------------------- */
 function downloadFile(url) {
   fetch(url)
     .then(res => res.blob())
     .then(blob => {
       const blobUrl = window.URL.createObjectURL(blob);
-
       const a = document.createElement("a");
       a.href = blobUrl;
       a.download = url.split("/").pop(); // filename
       document.body.appendChild(a);
       a.click();
       a.remove();
-
       URL.revokeObjectURL(blobUrl);
     })
     .catch(err => console.error("Download failed:", err));
 }
 
-// -----------------------------
-// Capitalize Helper
-// -----------------------------
-function capitalize(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
+/* -------------------------------
+   Helpers
+-------------------------------- */
+function capitalize(text) {
+  return text.charAt(0).toUpperCase() + text.slice(1);
 }
-
-// -----------------------------
-// Initialize
-// -----------------------------
-window.addEventListener("load", async () => {
-  const papers = await loadPapers();
-  populateFilters(papers);
-  renderPapers(papers);
-
-  document.getElementById("subjectFilter").addEventListener("change", () => applyFilters(papers));
-  document.getElementById("yearFilter").addEventListener("change", () => applyFilters(papers));
-  document.getElementById("searchBox").addEventListener("input", () => applyFilters(papers));
-});
